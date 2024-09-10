@@ -20,6 +20,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from utils.prepare_dataset import prepare_dataset
+from utils.log_util import log
 from model.autoencoder import AutoEncoder
 from datasets.MoNuSeg import MoNuSegDataset, load_image, load_label, normalize_image, fix_channel_dimension
 from preprocessing.prepare_MoNuSeg import load_MoNuSeg_annotation
@@ -154,7 +155,7 @@ def detect_cells(image: np.array, model: torch.nn.Module,
         if probs[i] < 0.5:
             detections.pop(i)
     after_filtering = len(detections)
-    print(f"[Step] Filtered out {before_filtering - after_filtering} detections with low cell probability.")
+    log(f"[Step] Filtered out {before_filtering - after_filtering} detections with low cell probability.", filepath=config.log_path)
 
     # Filter out detections with low scores.
     before_filtering = len(detections)
@@ -162,11 +163,11 @@ def detect_cells(image: np.array, model: torch.nn.Module,
     print(f"Score mean: {score_mean}, score std: {score_std} before filtering out detections with low scores...")
     detections = [det for det in detections if det[4] > score_mean + 0 * score_std]
     after_filtering = len(detections)
-    print(f"[Step] Filtered out {before_filtering - after_filtering} detections with low scores.")
+    log(f"[Step] Filtered out {before_filtering - after_filtering} detections with low scores.", filepath=config.log_path)
 
-    print("[Step] Performing NMS...")
+    log("[Step] Performing NMS...", filepath=config.log_path)
     detections = non_max_suppression(detections, nms_threshold)
-    print(f"Detected {len(detections)} cells.")
+    log(f"Detected {len(detections)} cells.", filepath=config.log_path)
 
     return detections
 
@@ -346,6 +347,14 @@ def visualize_detections(image_path: str, detections: List[Tuple[int, int, int, 
     image_name = os.path.basename(image_path).split('.')[0]
     plt.savefig(f'./{image_name}_detection_visualization.png', pad_inches=0)
 
+    # Summarize the results.
+    log('Our method:', filepath=config.log_path)
+    log(f'Detected {len(detections)} cells.', filepath=config.log_path)
+    log(f'Precision: {precision:.4f}; Recall: {recall:.4f}; F1: {f1:.4f}', filepath=config.log_path)
+    log('Blob detector:', filepath=config.log_path)
+    log(f'Detected {len(blob_detections)} cells.', filepath=config.log_path)
+    log(f'Precision: {blob_precision:.4f}; Recall: {blob_recall:.4f}; F1: {blob_f1:.4f}', filepath=config.log_path)
+
 def main(config):    
     device = torch.device(
         'cuda:%d' % config.gpu_id if torch.cuda.is_available() else 'cpu')
@@ -369,7 +378,7 @@ def main(config):
     cell_bank_patches = []
     cell_bank_labels = []
     # print(dataset.patchID2Class)
-    print('len of dataset:', len(dataset))
+    print('Size of Cell Bank dataset:', len(dataset))
     for iter_idx, (_, _, _, _, canonical_images, _) in enumerate(dataloader):
         cell_bank_patches.append(canonical_images) # [B, C, H, W]
         for i in range(canonical_images.shape[0]):
@@ -412,11 +421,17 @@ if __name__ == "__main__":
     parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--num_workers', default=4, type=int)
 
+    # Filtering parameters
+    parser.add_argument('--score_std_multiplier', default=0, type=float) # keep score > mean + std * score_std_multiplier
+    parser.add_argument('--prob_threshold', default=0.5, type=float) # keep prob >= prob_threshold
+    # Covolution, NMS, Voting parameters
     parser.add_argument("--patch_size", type=int, default=32)
     parser.add_argument("--stride", type=int, default=1)
     parser.add_argument("--nms_threshold", type=float, default=0.1)
     parser.add_argument("--voting_k", type=int, default=1)
     parser.add_argument("--tp_iou", type=float, default=0.1)
+    # Logging parameters
+    parser.add_argument('--log_dir', default=ROOT_DIR + '/results/cell_counting/', type=str)
     config = parser.parse_args()
 
     if config.organ is not None:
@@ -424,5 +439,12 @@ if __name__ == "__main__":
     
     config.image_annotation_path = config.image_path.replace('/images/', '/').replace('.png', '.xml')
     config.image_label_path = config.image_path.replace('/images/', '/masks/')
+
+    # Create log directory if not exists
+    os.makedirs(config.log_dir, exist_ok=True)
+    log_file = f'{config.log_dir}/{config.organ}_nms{config.nms_threshold}_voting{config.voting_k}_score_std{config.score_std_multiplier}_prob{config.prob_threshold}.log'
+    config.log_path = os.path.join(config.log_dir, log_file)
+    log(f"Logging to {config.log_path}", filepath=config.log_path, to_console=True)
+    log(f"Config: {config}", filepath=config.log_path, to_console=True)
 
     main(config)

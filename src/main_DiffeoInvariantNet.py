@@ -480,8 +480,8 @@ def main(config):
         if type(getattr(config, key)) == str and '$ROOT' in getattr(config, key):
             setattr(config, key, getattr(config, key).replace('$ROOT', ROOT))
 
-    model_name = f'dataset-{config.dataset_name}_fewShot-{config.percentage}%_organ-{config.organ}'
-    DiffeoInvariantNet_str = f'DiffeoInvariantNet-{config.DiffeoInvariantNet_model}_depth-{config.depth}_latentLoss-{config.latent_loss}_epoch-{config.max_epochs}_seed-{config.random_seed}_backgroundRatio-{config.background_ratio:.1f}'
+    model_name = f'dataset-{config.dataset_name}_fewShot-{config.percentage:.1f}%_organ-{config.organ}'
+    DiffeoInvariantNet_str = f'DiffeoInvariantNet-{config.DiffeoInvariantNet_model}_depth-{config.depth}_latentLoss-{config.latent_loss}_epoch-{config.max_epochs}_seed-{config.random_seed}_bgRatio-{config.background_ratio:.1f}'
     config.output_save_path = os.path.join(config.output_save_folder, model_name, DiffeoInvariantNet_str, '')
     config.DiffeoInvariantNet_model_save_path = os.path.join(config.output_save_path, model_name, DiffeoInvariantNet_str, 'model.ckpt')
     config.log_path = os.path.join(config.output_save_folder, model_name, DiffeoInvariantNet_str, 'log.txt')
