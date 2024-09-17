@@ -5,7 +5,7 @@
 
 
 
-## [New] Usage
+## Usage
 Train and test DiffeoInvariantNet. (Remove `--use-wandb` if you don't want to use Weights and Biases.)
 ```
 cd src/
@@ -29,7 +29,6 @@ python stitch_patches.py
 python evaluate_monuseg.py
 python evaluate_glysac.py
 ```
-
 
 
 ## Preparation
@@ -56,56 +55,6 @@ download from https://drive.google.com/file/d/1ARiB5RkSsWmAB_8mqWnwDF8ZKTtFwsjl/
 ```
 ## under `comparison/SAM_Med2D/checkpoints/`
 download from https://drive.google.com/file/d/1ARiB5RkSsWmAB_8mqWnwDF8ZKTtFwsjl/view
-```
-
-
-
-## Naming Conventions
-```
-    # The output of the model will be saved in the following directory
-    # e.g. 0.100_Colon_m2_MoNuSeg_depth5_seed1_SimCLR
-    # -- reg2seg: Reg2Seg results
-    # -- reg2seg.ckpt: Reg2Seg model
-    # -- aiae.ckpt: AIAE model
-    # -- test_pairs.csv: test pairs
-    # -- train_pairs.csv: training pairs
-    model_name = f'{config.percentage:.3f}_{config.organ}_m{config.multiplier}_MoNuSeg_depth{config.depth}_seed{config.random_seed}_{config.latent_loss}'
-```
-
-## Train on MoNuSeg
-```
-# prepare data
-cd src/
-# This will extract annotations & patches from the MoNuSeg dataset
-python preprocessing/prepare_MoNuseg.py --patch_size 96 --aug_patch_size 32
-# This will subsample and augment the dataset, and output data yaml config file in '../config/MoNuSeg_data.yaml'
-python preprocessing/augment_MoNuseg.py \
-                  --patch_size {patch_size} \
-                  --augmented_patch_size {aug_patch_size} \
-                  --percentage {percent} \
-                  --multiplier {multiplier} \
-                  --organ {organ_type}
-
-# train AIAE
-python train_unsupervised_AE.py \
-              --mode train \
-              --data-config  '../config/MoNuSeg_data.yaml' \
-              --model-config '../config/MoNuSeg_AIAE.yaml' \
-              --num-workers {num_workers}
-
-# infer & generate training & test pairs for Reg2Seg
-python train_unsupervised_AE.py \
-              --mode infer \
-              --data-config '../config/MoNuSeg_data.yaml' \
-              --model-config '../config/MoNuSeg_reg2seg.yaml' \
-              --num-workers {num_workers}
-
-# train Reg2Seg using matched pairs
-python train_reg2seg.py --mode train --config ../config/MoNuSeg_reg2seg.yaml
-
-# infer segmentation using Reg2Seg
-python train_reg2seg.py --config ../config/MoNuSeg_reg2seg.yaml --mode infer
-
 ```
 
 ### External Dataset
@@ -192,17 +141,4 @@ python -m pip install scikit-learn==1.1.3  # need to downgrade to 1.1.3
 # echo 'CUDNN_PATH=$(dirname $(python -c "import nvidia.cudnn;print(nvidia.cudnn.__file__)"))' >> $CONDA_PREFIX/etc/conda/activate.d/env_vars.sh
 # echo 'export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$CUDNN_PATH/lib:$LD_LIBRARY_PATH' >> $CONDA_PREFIX/etc/conda/activate.d/env_vars.sh
 source $CONDA_PREFIX/etc/conda/activate.d/env_vars.sh
-
-```
-
-## Train Augmentation-agonostic network
-```
-python train_AE.py --mode train --config {config} --num-workers 4
-```
-
-
-
-```
-cd src/scripts/
-python match_cells.py --config ../../config/aug_AutoEncoder_depth5_seed1_simCLR.yaml
 ```
