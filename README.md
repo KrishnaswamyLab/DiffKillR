@@ -3,6 +3,8 @@
 [![Twitter](https://img.shields.io/twitter/follow/KrishnaswamyLab.svg?style=social&label=Follow)](https://twitter.com/KrishnaswamyLab)
 [![Github Stars](https://img.shields.io/github/stars/KrishnaswamyLab/DiffKillR.svg?style=social&label=Stars)](https://github.com/KrishnaswamyLab/DiffKillR/)
 
+Please raise issues [here](https://github.com/ChenLiu-1996/DiffKillR).
+
 
 
 ## Usage
