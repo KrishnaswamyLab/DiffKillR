@@ -4,6 +4,8 @@
 [![Github Stars](https://img.shields.io/github/stars/KrishnaswamyLab/DiffKillR.svg?style=social&label=Stars)](https://github.com/KrishnaswamyLab/DiffKillR/)
 [![ArXiv](https://img.shields.io/badge/ArXiv-DiffKillR-firebrick)](https://arxiv.org/abs/2410.03058)
 
+This is the official PyTorch implementation of [DiffKillR](https://arxiv.org/abs/2410.03058), ICASSP 2025.
+
 Please raise issues [here](https://github.com/ChenLiu-1996/DiffKillR).
 
 
