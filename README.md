@@ -9,6 +9,23 @@ This is the official PyTorch implementation of [DiffKillR](https://arxiv.org/abs
 Please raise issues [here](https://github.com/ChenLiu-1996/DiffKillR).
 
 
+## Citation
+```
+@inproceedings{liu2025diffkillr,
+  title={Diffkillr: Killing and recreating diffeomorphisms for cell annotation in dense microscopy images},
+  author={Liu, Chen and Liao, Danqi and Parada-Mayorga, Alejandro and Ribeiro, Alejandro and DiStasio, Marcello and Krishnaswamy, Smita},
+  booktitle={ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  year={2025},
+  organization={IEEE}
+}
+
+@article{liu2024diffkillr,
+  title={Diffkillr: Killing and recreating diffeomorphisms for cell annotation in dense microscopy images},
+  author={Liu, Chen and Liao, Danqi and Parada-Mayorga, Alejandro and Ribeiro, Alejandro and DiStasio, Marcello and Krishnaswamy, Smita},
+  journal={arXiv preprint arXiv:2410.03058},
+  year={2024}
+}
+```
 
 ## Usage
 Train and test DiffeoInvariantNet. (Remove `--use-wandb` if you don't want to use Weights and Biases.)
