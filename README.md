@@ -1,12 +1,22 @@
-# DiffKillR: Killing and Recreating Diffeomorphisms for Cell Annotation in Dense Microscopy Images
-### Krishnaswamy Lab, Yale University
+<h1 align="center">
+[ICASSP 2025 Oral] DiffKillR
+</h1>
+
+<p align="center">
+<strong>Killing and Recreating Diffeomorphisms for Cell Annotation in Dense Microscopy Images</strong>
+</p>
+
+<div align="center">
+
 [![ArXiv](https://img.shields.io/badge/ArXiv-DiffKillR-firebrick)](https://arxiv.org/abs/2410.03058)
 [![Slides](https://img.shields.io/badge/Slides-yellow)](https://chenliu-1996.github.io/slides/DiffKillR_slides.pdf)
 [![ICASSP](https://img.shields.io/badge/ICASSP-blue)](https://ieeexplore.ieee.org/abstract/document/10888526)
-[![Twitter](https://img.shields.io/twitter/follow/KrishnaswamyLab.svg?style=social&label=Follow)](https://twitter.com/KrishnaswamyLab)
+[![Twitter](https://img.shields.io/twitter/follow/KrishnaswamyLab.svg?style=social)](https://twitter.com/KrishnaswamyLab)
 [![Github Stars](https://img.shields.io/github/stars/KrishnaswamyLab/DiffKillR.svg?style=social&label=Stars)](https://github.com/KrishnaswamyLab/DiffKillR/)
 
-This is the official PyTorch implementation of [DiffKillR](https://arxiv.org/abs/2410.03058), ICASSP 2025.
+</div>
+
+This is the official PyTorch implementation of [DiffKillR](https://arxiv.org/abs/2410.03058), **ICASSP 2025 (Oral)**.
 
 Please raise issues [here](https://github.com/ChenLiu-1996/DiffKillR).
 
